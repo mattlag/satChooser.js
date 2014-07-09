@@ -6,17 +6,32 @@ The 'sat' is for Saturation - the only colors displayed are fully saturated (in 
 # Example
 You could put something like this in your head section:
 ```javascript
-var sc = {};
+
+var sc;
 function init(){
 	sc = new satChooser({"clickCallback":"setUserColorChoice"});
 	document.body.onclick = sc.hide();
 }
+
 ```
+Define a function to handle the callback:
+```javascript
+
+function setUserColorChoice(args){
+	alert("Great, " + args.username + " chose " + args.colorstring);
+}
+
+````
+The 'colorstring' and 'colorobject' properties of the passed argument will be set by whatever the user chose.
 
 Then put something like this in the body:
 ```javascript
+
 <button onclick='sc.show({"elem":this, "args":{"username":"joe"}});'>hi, joe! choose a color</button>
+
 ```
+You can add additional arguments in the 'args' object that will be passed to your callback function.
+
 
 ## License
 Copyright (C) 2014 Matthew LaGrandeur, released under [GPL 3.0](https://www.gnu.org/licenses/gpl-3.0-standalone.html)
