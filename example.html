@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>satChooser.js Example</title>
+<script src="satChooser.js"></script>
+<script type="text/javascript">
+	var sc;
+	var count = 0;
+	function init() {
+		sc = new satChooser({"clickCallback":changeTheColor});
+		document.body.onclick = sc.hide();
+	}
+
+	function changeTheColor(args){
+		console.log("Clicked on the color " + args.colorstring);
+		document.getElementById('result').innerHTML = args.colorstring;
+		document.body.style.backgroundColor = args.colorstring;
+	}
+</script>
+<style type="text/css">
+	body {
+		margin:auto;
+		text-align: center;
+		background-color: rgb(240,242,244);
+		height: 100%;
+		font-family: sans-serif;
+		color: white;
+		font-size: 20px;
+	}
+
+	button {
+		font-size: 20px;
+		margin-top:400px;
+		margin-bottom: 20px;
+	}
+</style>
+</head>
+<body onload="init();">
+	<button onclick="sc.show({'elem':this, 'args':{}});">Hello, choose a color!</button><br>
+	<div id='result'></div>
+</body>

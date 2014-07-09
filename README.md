@@ -8,14 +8,14 @@ You could put something like this in your head section:
 ```javascript
 var sc = {};
 function init(){
-	sc = new satChooser({"clickCallback":setUserColorChoice});
+	sc = new satChooser({"clickCallback":"setUserColorChoice"});
 	document.body.onclick = sc.hide();
 }
 ```
 
 Then put something like this in the body:
 ```javascript
-<button onclick="sc.show({"elem":this, "args":{"username":"joe"}});">hi, joe! choose a color</button>
+<button onclick='sc.show({"elem":this, "args":{"username":"joe"}});'>hi, joe! choose a color</button>
 ```
 
 ## License
