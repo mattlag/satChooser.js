@@ -3,7 +3,7 @@ Allows you to add a little contextual popup area to a DIV or something on a page
 
 It looks like this:
 
-![](images/table https://github.com/mattlag/satChooser.js/blob/master/satchooser.png?raw=true)
+![](images/table https://github.com/mattlag/satChooser.js/blob/master/satchooser.png)
 
 The 'sat' is for Saturation - the only colors displayed are fully saturated (in the HSL sense).  Any of these colors can then be tinted or shaded (lightened or darkened) depending on the needs of the UI.
 
