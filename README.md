@@ -9,7 +9,7 @@ You could put something like this in your head section:
 
 var sc;
 function init(){
-	sc = new satChooser({"clickCallback":"setUserColorChoice"});
+	sc = new satChooser({"clickCallback":setUserColorChoice});
 	document.body.onclick = sc.hide();
 }
 
