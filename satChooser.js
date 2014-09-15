@@ -1,5 +1,5 @@
 /*
-	satChooser
+	SatChooser
 
 	Shows a small in-context dialog box so that a user can choose a 
 	color.  The colors displayed are fully saturated colors, in the
@@ -14,12 +14,13 @@
 
 */
 
-function satChooser(pv){
-	//console.log("Passed Variable: " + JSON.stringify(pv));
+function SatChooser(pv){
+	// console.log('SatChooser constructor');
+	// console.log('\t Passed Variable: ' + JSON.stringify(pv));
 
 	// Properties
 	pv = pv || {};
-	this.clickCallback = pv.clickCallback || function(c){ console.log("Click callback function returned object: " + JSON.stringify(c)); };
+	this.clickCallback = pv.clickCallback || function(c){ console.log('Click callback function returned object: ' + JSON.stringify(c)); };
 	this.clickCallbackArgs = {};
 	this.cellSize =	2;
 	this.pointerSize = pv.pointerSize || 20;
@@ -30,25 +31,24 @@ function satChooser(pv){
 	this.screenx = -1000;
 	this.screeny = -1000;
 	this.showSat = pv.showSat || true;
-	this.bhcID = pv.bhcID || "satchooser";
-	this.borderColor = pv.borderColor || "rgb(191,191,191)";
+	this.bhcID = pv.bhcID || 'satchooser';
+	this.borderColor = pv.borderColor || 'rgb(191,191,191)';
 
 	// Setup Canvas
-	this.can = document.createElement("canvas");
-	this.can.style.backgroundColor = "transparent";
-	this.can.style.borderWidth = "0px";
-	this.can.style.display = "none";
-	this.can.style.position = "absolute";
+	this.can = document.createElement('canvas');
+	this.can.style.backgroundColor = 'transparent';
+	this.can.style.borderWidth = '0px';
+	this.can.style.display = 'none';
+	this.can.style.position = 'absolute';
 	this.can.width = this.width;
 	this.can.height = this.height;
-	this.can.setAttribute("id", this.bhcID);
-	this.ctx = this.can.getContext("2d");
+	this.can.setAttribute('id', this.bhcID);
+	this.ctx = this.can.getContext('2d');
 	this.draw();
 	this.imgData = this.ctx.getImageData(0,0,this.can.width,this.can.height);
-	document.body.appendChild(this.can);
 
-	this.can.onmouseout = function(e){ e.target.style.display = "none"; };
-	this.can.onblur = function(e){ e.target.style.display = "none"; };
+	this.can.onmouseout = function(e){ e.target.style.display = 'none'; };
+	this.can.onblur = function(e){ e.target.style.display = 'none'; };
 
 	var that = this;
 
@@ -59,13 +59,14 @@ function satChooser(pv){
 			e.offsetY = e.layerY;
 		}
 
-		// console.log("CLICKED: \t x / y: " + e.offsetX + " / " + e.offsetY);
+		// console.log('SatChooser.onclick');
+		// console.log('\t x / y: ' + e.offsetX + ' / ' + e.offsetY);
 
 		if(	(e.offsetY < that.borderSize) ||
 			(e.offsetY > that.height - that.borderSize - that.pointerSize) ||
 			(e.offsetX < that.borderSize) ||
 			(e.offsetX > that.width - that.borderSize) ) {
-			// console.log("\t\t border");
+			// console.log('\t border');
 			return;
 		}
 
@@ -73,54 +74,68 @@ function satChooser(pv){
 		var rx = that.imgData.data[ipx+0];
 		var gx = that.imgData.data[ipx+1];
 		var bx = that.imgData.data[ipx+2];
-		var rgbx = "rgb("+rx+","+gx+","+bx+")";
+		var rgbx = 'rgb('+rx+','+gx+','+bx+')';
 		var reox = {r:rx, g:gx, b:bx};
 		
-		// console.log("\t\t\t ipx: " + ipx + "\t = " + rgbx);
+		// console.log('\t ipx: ' + ipx + '\t = ' + rgbx);
 
 		that.clickCallbackArgs.colorobject = reox;
 		that.clickCallbackArgs.colorstring = rgbx;
 		that.clickCallback(that.clickCallbackArgs);
-	};
+	};	
 }
 
-satChooser.prototype.getDiscreetWidth = function(w) {
+SatChooser.prototype.getDiscreetWidth = function(w) {
+	// console.log('SatChooser.getDiscreetWidth');
 	var numcells = (255 * 6 / this.step);
 	this.cellSize = Math.round((w - (this.borderSize*2)) /  numcells);
 	var rw = ((this.cellSize * numcells) + (this.borderSize*2));
-	//console.log("GDW passed: " + w + " returns " + rw + " \t\t numcells: " + numcells + " cellsize: " + this.cellSize + " step: " + this.step);
+	// console.log('\t passed: ' + w + ' returns ' + rw + '\t numcells: ' + numcells + ' cellsize: ' + this.cellSize + ' step: ' + this.step);
 	return rw;
 };
 
-satChooser.prototype.show = function(pv){
+SatChooser.prototype.show = function(pv){
+	// console.log('SatChooser.show');
+	// console.log('\t passed: ');
+	// console.log(pv.elem);
+
 	document.body.appendChild(this.can);
 
-	this.clickCallbackArgs = pv.args;
+	this.clickCallbackArgs = pv.args || {};
 	var cs = this.can.style;
 	var x = this.ctx;
 	var fw = this.width;
 	var hw = (this.width / 2);
+	var offset = getOffset(pv.elem);
 
-	this.screeny = (pv.elem.offsetTop - this.height);
-	this.screenx = (pv.elem.offsetLeft - hw + (pv.elem.offsetWidth / 2));
+	function getOffset(obj){
+		var total = obj.offsetParent ? getOffset(obj.offsetParent) : {'offsetTop': 0, 'offsetLeft': 0};
+		total.offsetTop += obj.offsetTop;
+		total.offsetLeft += obj.offsetLeft;
+		return total;
+	}
 
-	cs.display = "none";
-	cs.top = (this.screeny + "px");
-	cs.left = (this.screenx + "px");
+	// console.log('\t final offset: ' + JSON.stringify(offset));
+	this.screeny = (offset.offsetTop - this.height);
+	this.screenx = (offset.offsetLeft - hw + (pv.elem.offsetWidth / 2));
 
-	// console.log("\t\t\t style: " + JSON.stringify(cs));
-	// console.log("\t\t\t top / left: " + cs.top + " / " + cs.left);
-	// console.log("\t\t\t elem.w: " + elem.offsetRight);
+	cs.display = 'none';
+	cs.top = (this.screeny + 'px');
+	cs.left = (this.screenx + 'px');
+
+	// console.log('\t top / left: ' + cs.top + ' / ' + cs.left);
 
 	// Move & Show Chooser
-	cs.display = "block";
+	cs.display = 'block';
+
 };
 
-satChooser.prototype.hide = function(){
-	this.can.style.display = "none";
+SatChooser.prototype.hide = function(){
+	this.can.style.display = 'none';
 };
 
-satChooser.prototype.draw = function(){
+SatChooser.prototype.draw = function(){
+	// console.log('SatChooser.draw');
 	var x = this.ctx;
 	var fw = this.width;
 	var hw = (this.width / 2);
@@ -195,7 +210,7 @@ satChooser.prototype.draw = function(){
 			var tg = rgbSan(color.g + (i*gstep));
 			var tb = rgbSan(color.b + (i*bstep));
 
-			x.fillStyle = "rgb("+tr+","+tg+","+tb+")";
+			x.fillStyle = 'rgb('+tr+','+tg+','+tb+')';
 			x.strokeStyle = x.fillStyle;
 			//x.strokeWidth = .5;
 			x.fillRect(colx, (bs + (i*colw)), colw, colw);
