@@ -65,9 +65,9 @@ class SatChooser {
             // console.log('SatChooser.onclick');
             // console.log('\t x / y: ' + offsetX + ' / ' + offsetY);
             if ((offsetY < that.borderSize) ||
-				(offsetY > that.height - that.borderSize - that.pointerSize) ||
-				(offsetX < that.borderSize) ||
-				(offsetX > that.width - that.borderSize)) {
+                (offsetY > that.height - that.borderSize - that.pointerSize) ||
+                (offsetX < that.borderSize) ||
+        (offsetX > that.width - that.borderSize)) {
                 // console.log('\t border');
                 return;
             }
